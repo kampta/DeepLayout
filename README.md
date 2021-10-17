@@ -7,7 +7,7 @@ This repo contains code for single GPU training of LayoutTransformer from
 This code was rewritten from scratch using a cleaner GPT [codebase](https://github.com/karpathy/minGPT).
 Some of the details such as training hyperparameters might differ from the arxiv version of the paper.
 
-![teaser!](imgs/layout_teasor.jpg?raw=true)
+<!-- ![teaser!](imgs/layout_teasor.jpg?raw=true) -->
 
 
 ## How To Use This Code
@@ -79,13 +79,31 @@ Some of the details such as training hyperparameters might differ from the arxiv
 python main.py \
     --data_dir /path/to/mnist \
     --threshold 1 --exp mnist_threshold_1
-    
+```
+
+In your wandb, you can see some generated samples
+
+![media_images_sample_random_layouts_18750_0](https://user-images.githubusercontent.com/1719140/137636972-4030c68e-b1c1-4234-b420-cf3068a5a9c6.png)
+![media_images_sample_random_layouts_18750_1](https://user-images.githubusercontent.com/1719140/137636974-0f40c6ce-ea3c-445f-9610-b660f8b60d38.png)
+![media_images_sample_random_layouts_18750_2](https://user-images.githubusercontent.com/1719140/137636975-8365f231-246d-4aae-a2a2-a339dd27e8b5.png)
+![media_images_sample_random_layouts_18750_3](https://user-images.githubusercontent.com/1719140/137636976-6c8b88c0-41c0-43e1-a492-17dc718138be.png)
+
+
+```
 # Training on COCO bounding boxes or PubLayNet
 python main.py \
     --train_json /path/to/annotations/train.json \
     --val_json /path/to/annotations/val.json \
     --exp publaynet
 ```
+
+For the PubLayNet dataset, generated samples might look like this
+
+<!-- ![media_images_sample_random_layouts_15738_0](https://user-images.githubusercontent.com/1719140/137637044-cc345ae4-49c1-4ae2-ad2e-5532d2a080f6.png) -->
+![media_images_sample_random_layouts_15738_3](https://user-images.githubusercontent.com/1719140/137637046-e2181cda-904e-4ea3-868b-39a7bf64a236.png)
+![media_images_sample_random_layouts_26230_2](https://user-images.githubusercontent.com/1719140/137637047-43fd285f-afec-42ba-a4f7-04ddf66d4d86.png)
+![media_images_sample_random_layouts_26230_3](https://user-images.githubusercontent.com/1719140/137637048-7263f9ab-1d19-4826-a6c2-d7ce152d9e0d.png)
+
 
 ## BibTeX
 
@@ -108,6 +126,7 @@ We would like to thank several public repos
 * https://github.com/JiananLi2016/LayoutGAN-Tensorflow
 * https://github.com/Layout-Generation/layout-generation
 * https://github.com/karpathy/minGPT
+* https://github.com/ChrisWu1997/PQ-NET
 
 
 ## License
