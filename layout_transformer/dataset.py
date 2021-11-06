@@ -121,12 +121,14 @@ class JSONLayout(Dataset):
             ann_box = np.array(ann_box)
             ind = np.lexsort((ann_box[:, 0], ann_box[:, 1]))
             ann_box = ann_box[ind]
+       
+            ann_cat = np.array(ann_cat)
+            ann_cat = ann_cat[ind]
 
             # Discretize boxes
             ann_box = self.quantize_box(ann_box, width, height)
 
             # Append the categories
-            ann_cat = np.array(ann_cat)
             layout = np.concatenate([ann_cat.reshape(-1, 1), ann_box], axis=1)
 
             # Flatten and add to the dataset
