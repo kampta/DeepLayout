@@ -89,8 +89,9 @@ class Trainer:
             for it, (x, y) in pbar:
 
                 if epoch == 0 and not is_train:
-                    self.fixed_x = x[:min(4, len(x))]
-                    self.fixed_y = y[:min(4, len(y))]
+                    # Here I can decide how many layouts must be generated
+                    self.fixed_x = x[:min(8, len(x))]
+                    self.fixed_y = y[:min(8, len(y))]
 
                 # place data on the correct device
                 x = x.to(self.device)

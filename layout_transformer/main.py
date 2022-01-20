@@ -7,6 +7,8 @@ from model import GPT, GPTConfig
 from trainer import Trainer, TrainerConfig
 from utils import set_seed
 import json
+from pathlib import Path
+
 
 
 if __name__ == "__main__":
@@ -30,7 +32,7 @@ if __name__ == "__main__":
 
     # Architecture/training options
     parser.add_argument("--seed", type=int, default=42, help="random seed")
-    parser.add_argument("--epochs", type=int, default=15, help="number of epochs")
+    parser.add_argument("--epochs", type=int, default=20, help="number of epochs")
     parser.add_argument("--batch_size", type=int, default=64, help="batch size")
     parser.add_argument("--lr", type=float, default=4.5e-06, help="learning rate")
     parser.add_argument('--n_layer', default=6, type=int)
@@ -77,12 +79,14 @@ if __name__ == "__main__":
                           ckpt_dir=ckpt_dir,
                           samples_dir=samples_dir,
                           sample_every=args.sample_every)
-    with open("colors.json", "w") as f:
-        categories = train_dataset.categories
-        for idx, k in enumerate(categories.keys()):
-            r, g, b = train_dataset.colors[idx]
-            categories[k]["color"] = rgb2hex(r, g, b)
-        json.dump(categories, f)
+    
+    if not Path("colors.json").is_file():
+        with open("colors.json", "w") as f:
+            categories = train_dataset.categories
+            for idx, k in enumerate(categories.keys()):
+                r, g, b = train_dataset.colors[idx]
+                categories[k]["color"] = rgb2hex(r, g, b)
+            json.dump(categories, f)
         
     trainer = Trainer(model, train_dataset, valid_dataset, tconf, args)
     trainer.train()
