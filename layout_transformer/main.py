@@ -1,10 +1,12 @@
 import os
 import argparse
+from colormap import rgb2hex
 import torch
 from dataset import MNISTLayout, JSONLayout
 from model import GPT, GPTConfig
 from trainer import Trainer, TrainerConfig
 from utils import set_seed
+import json
 
 
 if __name__ == "__main__":
@@ -75,5 +77,12 @@ if __name__ == "__main__":
                           ckpt_dir=ckpt_dir,
                           samples_dir=samples_dir,
                           sample_every=args.sample_every)
+    with open("colors.json", "w") as f:
+        categories = train_dataset.categories
+        for idx, k in enumerate(categories.keys()):
+            r, g, b = train_dataset.colors[idx]
+            categories[k]["color"] = rgb2hex(r, g, b)
+        json.dump(categories, f)
+        
     trainer = Trainer(model, train_dataset, valid_dataset, tconf, args)
     trainer.train()

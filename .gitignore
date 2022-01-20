@@ -178,6 +178,7 @@ cython_debug/
 # JSON dataset
 train.json
 val.json
+colors.json
 
 # wandb
 wandb/
