@@ -121,14 +121,12 @@ class JSONLayout(Dataset):
             ann_box = np.array(ann_box)
             ind = np.lexsort((ann_box[:, 0], ann_box[:, 1]))
             ann_box = ann_box[ind]
-       
-            ann_cat = np.array(ann_cat)
-            ann_cat = ann_cat[ind]
 
             # Discretize boxes
             ann_box = self.quantize_box(ann_box, width, height)
 
             # Append the categories
+            ann_cat = np.array(ann_cat)
             layout = np.concatenate([ann_cat.reshape(-1, 1), ann_box], axis=1)
 
             # Flatten and add to the dataset
@@ -136,6 +134,8 @@ class JSONLayout(Dataset):
 
         self.max_length = max_length
         if self.max_length is None:
+            # for x in self.data:
+            #     print(len(x))
             self.max_length = max([len(x) for x in self.data]) + 2  # bos, eos tokens
         self.transform = Padding(self.max_length, self.vocab_size)
 
@@ -158,7 +158,8 @@ class JSONLayout(Dataset):
         return len(self.data)
 
     def render(self, layout):
-        img = Image.new('RGB', (256, 256), color=(255, 255, 255))
+        # (612, 792) is the dimension of a paper page]
+        img = Image.new('RGB', (612, 792), color=(255, 255, 255))
         draw = ImageDraw.Draw(img, 'RGBA')
         layout = layout.reshape(-1)
         layout = trim_tokens(layout, self.bos_token, self.eos_token, self.pad_token)
@@ -169,7 +170,9 @@ class JSONLayout(Dataset):
         box[:, [2, 3]] = box[:, [0, 1]] + box[:, [2, 3]]
 
         for i in range(len(layout)):
+            # Adjust boxes to be scaled for a paper page
             x1, y1, x2, y2 = box[i]
+            x1, y1, x2, y2 = x1 * 2.4, y1 * 3.1, x2 * 2.4, y2 * 3.1
             cat = layout[i][0]
             col = self.colors[cat-self.size] if 0 <= cat-self.size < len(self.colors) else [0, 0, 0]
             draw.rectangle([x1, y1, x2, y2],
