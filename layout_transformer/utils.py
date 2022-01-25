@@ -1,3 +1,5 @@
+from cmath import rect
+from collections import namedtuple
 import random
 import numpy as np
 import torch
@@ -72,3 +74,21 @@ def trim_tokens(tokens, bos, eos, pad=None):
         tokens = tokens[tokens != pad]
     return tokens
 
+def do_rects_overlap(rect1, rect2):
+    """
+    Check if two rects in form (x1, y1, x2, y2) do overlap.
+    """
+    Rectangle = namedtuple('Rectangle', 'xmin ymin xmax ymax')
+    rect1 = Rectangle(*rect1)
+    rect2 = Rectangle(*rect2)
+    dx = min(rect1.xmax, rect2.xmax) - max(rect1.xmin, rect2.xmin)
+    dy = min(rect1.ymax, rect2.ymax) - max(rect1.ymin, rect2.ymin)
+    if (dx>=0) and (dy>=0):
+        return True
+    return False
+
+def merge_rects(rect1, rect2):
+    Rectangle = namedtuple('Rectangle', 'x1 y1 x2 y2')
+    rect1 = Rectangle(*rect1)
+    rect2 = Rectangle(*rect2)
+    return (min(rect1.x1, rect2.x1), min(rect1.y1, rect2.y1), max(rect1.x2, rect2.x2), max(rect1.y2, rect2.y2))
